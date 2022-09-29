@@ -2,7 +2,7 @@ function cargar_figura()
 {   
     fetch('dimensiones.php')
     .then(response => response.json())
-    .then(data => verMapa('80%', '80%', data, 'edificios'));
+    .then(data => verMapa('100%', '80vh', data, 'edificios'));
 }
 
 let test;
