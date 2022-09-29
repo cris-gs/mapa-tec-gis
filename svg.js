@@ -66,14 +66,20 @@ function crear_grupoSVG(svg, descripcion) {
 
 function mostrarEdificio(id, tipo)
 {   
+    modalContainer.classList.add('show');
+    const h1 = document.querySelector('h1'); 
+    exit.addEventListener('click', () => {
+        modalContainer.classList.remove('show');
+    });
+    
     if(tipo.id === "edificios"){
-        alert(`Soy el edificio id: ${id}`)
+        h1.innerText = `Soy el edificio id: ${id}`;
     }else if(tipo.id === "aceras"){
-        alert(`Soy la acera id: ${id}`)
+        h1.innerText = `Soy la acera id: ${id}`;
     }else if(tipo.id === "vialidad"){
-        alert(`Soy la via id: ${id}`)
+        h1.innerText = `Soy la via id: ${id}`;
     }else{
-        alert(`Soy la zona verde id: ${id}`)
+        h1.innerText = `Soy la zona verde id: ${id}`;
     } 
 }
 
