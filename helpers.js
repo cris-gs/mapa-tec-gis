@@ -9,8 +9,7 @@ const zonasVerdes = document.getElementById('zonasVerdes');
 function validaCheckboxAceras(){
     const activo = document.getElementsByClassName('active');
     let acerasChecked = aceras.checked;
-    let elements = document.getElementsByClassName("aceras")
-    console.log(activo)
+    let elements = document.getElementsByClassName("aceras");
     if(activo.length === 0){
         if(!acerasChecked){   
             for(var i = 0; i < elements.length; i++) {
