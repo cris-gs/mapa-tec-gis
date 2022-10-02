@@ -1,9 +1,7 @@
 <?php
 /* llama a conectar que conecta a la base de datos
 y extrae los datos de la finca segun la cedula juridica */
-
-$conn = pg_connect("host=localhost port=5432 dbname=mapa_tec_gis user=postgres password=12345") or die('{"error":"Error de conexión con la base de datos"}');
-
+$conn = pg_connect("host=localhost port=5432 dbname=mapa_tec_gis user=postgres password=servidor1") or die('{"error":"Error de conexión con la base de datos"}');
 $id=$_GET['id'];
 
 $_SESSION["cedulaJuridica"] = $cedulaJuridica;
