@@ -1,6 +1,6 @@
 <?php
     /* conexión a la base de datos */
-    $conn = pg_connect("host=localhost port=5432 dbname=mapa_tec_gis user=postgres password=servidor1") or die('{"error":"Error de conexión con la base de datos"}');
+    $conn = pg_connect("host=localhost port=5432 dbname=mapa_tec_gis user=postgres password=12345") or die('{"error":"Error de conexión con la base de datos"}');
     
     /* extrae los voleres maximos y minimos en el eje X y Y correspondiente a los edificios */
     $resultEdificios = pg_query($conn, "select 	ST_Xmin(bb) as xmin, 
@@ -78,7 +78,7 @@
     /* Se guardan en un objeto los datos consultados anteriormente de la tabla de vialidad */
     $object_resultVialidad->objetos = pg_fetch_all($resultVialidad);
 
-    /* extrae los voleres maximos y minimos en el eje X y Y correspondiente a las zonas verdes */
+    /* extrae los valores maximos y minimos en el eje X y Y correspondiente a las zonas verdes */
     $resultZonasVerdes = pg_query($conn, "select 	ST_Xmin(bb) as xmin, 
                               ST_ymax(bb)*-1 as ymax, 
                               ST_Xmax(bb)-ST_Xmin(bb) as ancho,
