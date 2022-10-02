@@ -10,15 +10,14 @@ function cargar_figura()
 /* función que llama a las otras funciones para crear 
     las partes del svg según las dimensiones traidas en el json */
 let test;
-let buildings;
 let dimensions;
 let active = true;
 function verMapa(width, height, geometrias) 
 {   
     console.log(geometrias[0])
     svg = crearSVG(width, height, geometrias[0].dimensiones[0])
-    const tipo = ['edificios', 'aceras', 'vialidad', 'zonasVerdes']
-    for (let i = 0; i < 4; i++) { 
+    const tipo = ['edificios', 'aceras', 'vialidad', 'zonasVerdes', 'rutasEvacuacion', 'zonasSeguras']
+    for (let i = 0; i < 6; i++) { 
         ancho = parseFloat(geometrias[i].dimensiones[0].ancho)
         alto = parseFloat(geometrias[i].dimensiones[0].alto)
         if (alto > ancho)
@@ -49,9 +48,6 @@ function crearSVG(width, height, dimensiones) {
     asignandole atributos como relleno, borde, acción... */
 function crear_path(svg, geometrias, ancho_proporcional, tipo) {
     let xmlns = "http://www.w3.org/2000/svg";
-    if (tipo === 'edificios') {
-        buildings = geometrias;
-    }
     for (geom in geometrias) {
         figura = document.createElementNS(xmlns, "path");
         figura.setAttribute("d", geometrias[geom].svg);
@@ -60,7 +56,7 @@ function crear_path(svg, geometrias, ancho_proporcional, tipo) {
         }else{
             figura.setAttribute("stroke", "transparent");
         }
-        
+
         figura.setAttribute("class", tipo);
         figura.setAttribute("fill", colorRGB(tipo, geometrias[geom].id));
         figura.setAttribute("stroke-width", ancho_proporcional+1000);
@@ -89,7 +85,7 @@ function mostrarEdificio(id, tipo)
         let vb;
         if(active) {
             //figura.setAttribute("class", "active");
-            let url="/mapaSvg/base/cuadroDelimitador.php?id="+id;
+            let url="/mapa-tec-gis/cuadroDelimitador.php?id="+id;
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() 
             {
@@ -104,11 +100,15 @@ function mostrarEdificio(id, tipo)
             xhttp.open("GET", url, true);
             xhttp.send();
             active = false;
+            validaCapas("rutasEvacuacion", active);
+            validaCapas("zonasSeguras", active);
         } else {
             vb = dimensions.xmin + ' ' + dimensions.ymax + ' ' + dimensions.ancho + ' ' + dimensions.alto;
             test.setAttribute('viewBox', vb);
             test.removeAttribute('class', 'active');
             active = true;
+            validaCapas("rutasEvacuacion", active);
+            validaCapas("zonasSeguras", active);
         }
     }  
 }
@@ -125,8 +125,28 @@ function colorRGB(tipo, id){
         return "grey";
     }else if(tipo === "vialidad"){
         return "rgba(54, 54, 54)";
-    }else{
+    }else if(tipo === "zonasVerdes"){
         return "rgba(37, 175, 106)";
-    } 
+    }else if(tipo === "rutasEvacuacion"){
+        return "#FAC748";
+    }else{
+        return "#1D2F6F"
+    }
+    
+}
+
+/* muestra o esconde una capa, según si está en vista general o no */
+function validaCapas(capa, active){
+    console.log('Hola')
+    let elements = document.getElementsByClassName(capa);
+    if(!active){
+        for(let i = 0; i < elements.length; i++) {
+            elements[i].classList.add('show');
+        }
+    } else {
+        for(let i = 0; i < elements.length; i++) {
+            elements[i].classList.remove('show');
+        }
+    }
     
 }

@@ -47,3 +47,19 @@ body{
     transition: fill 0.3s;
     cursor: pointer;
 }
+
+.rutasEvacuacion,
+.zonasSeguras {
+    visibility: hidden;
+}
+
+.rutasEvacuacion {
+    stroke: #dece0c;
+    fill: none;
+    stroke-dasharray: none;
+    stroke-width: 1;
+}
+
+.show {
+    visibility: visible;
+}

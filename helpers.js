@@ -80,7 +80,6 @@ function validaCheckboxZonasVerdes(){
     }
 }
 
-
 /* escucha cuando el estado del los checkbox cambia para llamar a la función correspondiente */
 aceras.addEventListener("change", validaCheckboxAceras, false);
 vialidad.addEventListener("change", validaCheckboxVialidad, false);
