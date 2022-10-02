@@ -64,7 +64,7 @@ function crear_path(svg, geometrias, ancho_proporcional, tipo) {
         figura.setAttribute("class", tipo);
         figura.setAttribute("fill", colorRGB(tipo, geometrias[geom].id));
         figura.setAttribute("stroke-width", ancho_proporcional+1000);
-        figura.setAttribute("onclick", `mostrarEdificio(${geom}, ${tipo})`);
+        figura.setAttribute("onclick", `mostrarEdificio(${geometrias[geom].id})`);
         svg.appendChild(crear_grupoSVG(figura, geometrias[geom].nombre));
     }
 }
@@ -83,22 +83,29 @@ function crear_grupoSVG(svg, descripcion) {
 
 /* función para agregar acción a los elementos del svg que 
     corresponden a edificios*/
-function mostrarEdificio(geom, tipo)
+function mostrarEdificio(id)
 { 
-    const building = buildings[geom];
-    const svg = building.svg
-    const coordinates = svg.split(' ');
-    
     let vb;
     if(active) {
-        vb = (parseFloat(coordinates[1]) - 25).toString()  + ' ' + (parseFloat(coordinates[2]) - 50).toString() + ' ' + '100' + ' ' + '100';
+        let url="/mapa-tec-gis/cuadroDelimitador.php?id="+id;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() 
+        {
+            if (this.readyState == 4 && this.status == 200){
+                const datos = eval('('+this.responseText+')');
+                const coordinates = datos[0].dimensiones[0];
+                vb = coordinates.xmin  + ' ' + coordinates.ymax + ' ' + coordinates.ancho + ' ' + coordinates.alto;
+                test.setAttribute('viewBox', vb);
+            }
+        };
+        xhttp.open("GET", url, true);
+        xhttp.send();
         active = false;
     } else {
         vb = dimensions.xmin + ' ' + dimensions.ymax + ' ' + dimensions.ancho + ' ' + dimensions.alto;
+        test.setAttribute('viewBox', vb);
         active = true;
     }
-    test.setAttribute('viewBox', vb);
-    console.log(dimensions.xmin + ' ' + dimensions.ymax + ' ' + dimensions.ancho + ' ' + dimensions.alto)
 }
 
 /* función que se encarga de asignar color a los elementos del svg */
