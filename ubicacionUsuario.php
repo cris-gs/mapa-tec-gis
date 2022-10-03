@@ -7,9 +7,8 @@ $lat=$_GET['lat'];
 $lng=$_GET['lng'];
 
 /* Crea un punto de la ubicación geografica del usuario y lo pasa a formato svg  */
-$ubicacionUsuario = pg_query($conn, "select ST_AsSVG(ST_SetSRID(ST_MakePoint('$lat', '$lng'), 5367), 0, 2) as svg;");
-                               
-if (!$ubicacionUsuario) 
+$ubicacionUsuario = pg_query($conn, "select ST_AsSVG(ST_Transform(ST_SetSRID(ST_MakePoint('$lng', '$lat'), 4326), 5367), 0, 2) as svg;");
+if (!$ubicacionUsuario)  
 {
   echo '{"error":"Error en la consulta 1 de base de datos en edificios"}';
   exit;

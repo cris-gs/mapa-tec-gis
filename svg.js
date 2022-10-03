@@ -16,7 +16,6 @@ let xmlns = "http://www.w3.org/2000/svg";
 let usuario = document.createElementNS(xmlns, "circle");
 function verMapa(width, height, geometrias) 
 {   
-    console.log(geometrias[0])
     svg = crearSVG(width, height, geometrias[0].dimensiones[0])
     const tipo = ['edificios', 'aceras', 'vialidad', 'zonasVerdes', 'rutasEvacuacion', 'zonasSeguras']
     for (let i = 0; i < 6; i++) { 
@@ -181,10 +180,9 @@ function mostrarUsuario(coords){
         if (this.readyState == 4 && this.status == 200){
             const datos = eval('('+this.responseText+')');
             let ubicacion = datos[0].ubicacion[0].svg;
-            let cx = ubicacion.substring(4, 9);
-            let cy = ubicacion.substring(15, 20);
-            usuario.setAttribute("cx", cx);
-            usuario.setAttribute("cy", cy);
+            ubicacion = ubicacion.split('"');
+            usuario.setAttribute("cx", ubicacion[1]);
+            usuario.setAttribute("cy", ubicacion[3]);
             usuario.setAttribute("r", "3");
             usuario.setAttribute("class", "usuario");
             test.appendChild(usuario);
