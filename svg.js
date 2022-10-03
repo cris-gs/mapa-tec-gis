@@ -12,6 +12,8 @@ function cargar_figura()
 let test;
 let dimensions;
 let active = true;
+let xmlns = "http://www.w3.org/2000/svg";
+let usuario = document.createElementNS(xmlns, "circle");
 function verMapa(width, height, geometrias) 
 {   
     console.log(geometrias[0])
@@ -28,6 +30,7 @@ function verMapa(width, height, geometrias)
         document.getElementById("mapa").appendChild(svg);
      }
      test = svg
+     ubicacionUsuario();
 }
 
 /* función que se encarga de ir cargando en un svg los 
@@ -146,4 +149,47 @@ function validaCapas(capa, active){
         }
     }
     
+}
+
+/* Función para obtener la ubicaciòn actual del usuario cada cierto tiempo */
+function ubicacionUsuario(){
+    if(navigator.geolocation){
+        navigator.geolocation.watchPosition((position) => {
+            const coords = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            }
+            mostrarUsuario(coords)
+          }, (error) => {
+            alert('Ha ocurrido un ERROR.')
+            console.log(error)
+           }, {
+            enableHighAccuracy: true
+           }
+        );
+    } else {
+    alert("Tu navegador no dispone de la geolocalización, actualizalo.")
+    }
+}
+
+/* Función que hace la consulta para crear un punto con la ubicaciòn actual del usuario y lo inserta en el svg */
+function mostrarUsuario(coords){
+    let url="/mapa-tec-gis/ubicacionUsuario.php?lat="+coords.lat+"&lng="+coords.lng;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() 
+    {
+        if (this.readyState == 4 && this.status == 200){
+            const datos = eval('('+this.responseText+')');
+            let ubicacion = datos[0].ubicacion[0].svg;
+            let cx = ubicacion.substring(4, 9);
+            let cy = ubicacion.substring(15, 20);
+            usuario.setAttribute("cx", cx);
+            usuario.setAttribute("cy", cy);
+            usuario.setAttribute("r", "3");
+            usuario.setAttribute("class", "usuario");
+            test.appendChild(usuario);
+        }
+    };
+    xhttp.open("GET", url, true);
+    xhttp.send();
 }
